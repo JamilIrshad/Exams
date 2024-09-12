@@ -61,7 +61,8 @@ class ExamController extends Controller
 
     public function edit($id)
     {
-        // dd($id);
+        //dd() to the check the method which was used to access this route i.e POST, PUT
+        //dd(request()->method());
         //find the exam from db
         $exam = Exam::findorfail($id);
 

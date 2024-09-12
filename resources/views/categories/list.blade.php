@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <table class="table">
                             <tr>
-                                <th>ID</th>
+                                <th></th>
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Action</th>
@@ -58,16 +58,16 @@
                             @if ($categories->isNotEmpty())
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td>{{$category->id}}</td>
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->description}}</td>
-                                        <td class="btn-group">
+                                        <td class="align-middle">
                                             <a href="{{ route('categories.edit', $category->id) }}"
-                                                class="btn btn-outline-success">Update</a>
+                                                class="btn btn-outline-success my-1">Update</a>
                                             <form action="{{ route('categories.destroy', $category) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                                <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

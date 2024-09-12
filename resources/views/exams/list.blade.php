@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <table class="table">
                             <tr>
-                                <th align-middle text-center>ID</th>
+                                <th align-middle text-center></th>
                                 <th class="align-middle text-center text-center"></th> <!-- Image -->
                                 <th align-middle text-center>Name</th>
                                 <th align-middle text-center>Description</th>
@@ -62,7 +62,7 @@
                             @if ($exams->isNotEmpty())
                                 @foreach ($exams as $exam)
                                     <tr>
-                                        <td class="align-middle text-center">{{$exam->id}}</td>
+                                        <td class="align-middle text-center">{{$loop->iteration}}</td>
                                         @if ($exam->image_path != "")
                                             <td class="align-middle"><img src="{{asset($exam->image_path)}}" alt="" width="100"
                                                     height="100"></td>
@@ -73,8 +73,8 @@
                                         <td class="align-middle text-center text-center">{{$exam->category}}</td>
                                         <td class="align-middle">${{$exam->price}}</td>
                                         <td class="align-middle">
-                                        <a href="{{ route('exams.edit', $exam->id) }}"
-                                        class="btn btn-outline-success my-1">Update</a>
+                                            <a href="{{ route('exams.edit', $exam->id) }}"
+                                                class="btn btn-outline-success my-1">Update</a>
                                             <form action="{{ route('exams.destroy', $exam) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
