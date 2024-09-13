@@ -27,6 +27,12 @@
                     <li class="nav-item active">
                         <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
                     </li>
+                    <li class="nav-item justify-content-end">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

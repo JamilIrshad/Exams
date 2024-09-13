@@ -27,6 +27,13 @@
                     <li class="nav-item active">
                         <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
                     </li>
+                    <li class="nav-item justify-content-end">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+                        </form>
+
+                    </li>
                 </ul>
             </div>
         </div>
@@ -36,12 +43,14 @@
             @if (Session::has('success'))
                 <div class="alert alert-success">{{session('success')}}</div>
             @endif
-            <div class="row justify-content-center ms-1 mb-3">
-                <div class="col-md-8 d-flex justify-content-end">
-                    <a href="{{route('categories.create')}}" class="btn btn-warning border-black border-2">Add
-                        Category</a>
+            @if (Auth::user()->is_admin == 1)
+                <div class="row justify-content-center ms-1 mb-3">
+                    <div class="col-md-8 d-flex justify-content-end">
+                        <a href="{{route('categories.create')}}" class="btn btn-warning border-black border-2">Add
+                            Category</a>
+                    </div>
                 </div>
-            </div>
+            @endif
             <div class="col-md-8">
                 <div class="card borde-0 shadow-lg">
                     <div class="card-header bg-dark text-light text-center">

@@ -20,11 +20,18 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                        <a class="nav-link text-light" href="{{route('exams.list')}}">Exams<span class="sr-only"></span></a>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{route('exams.list')}}">Exams<span
+                                class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
+                    </li>
+                    <li class="nav-item justify-content-end">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -53,7 +60,8 @@
                                 <label for="description" class="form-label h6">Description</label>
                                 <textarea name="description"
                                     class="@error('description') is-invalid @enderror form-control form-control-lg"
-                                    placeholder="Description" id="description" rows="4">{{old('description')}}</textarea>
+                                    placeholder="Description" id="description"
+                                    rows="4">{{old('description')}}</textarea>
                                 @error('description')
                                     <p class="invalid-feedback">{{$message}}</p>
                                 @enderror

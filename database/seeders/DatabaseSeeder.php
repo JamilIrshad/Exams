@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         DB::table('exams')->insert([
             'name' => 'Associate Cloud Engineer',
             'exam_date' => '2024-12-01',
-            'category_id' => 2,
+            'category_id' => 1,
             'description' => 'Associate Cloud Engineer exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Google Cloud Platform.',
             'price' => 125.00,
             'image_path' => 'associate_cloud_engineer.png',
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         DB::table('exams')->insert([
             'name' => 'Professional Cloud Architect',
             'exam_date' => '2024-10-05',
-            'category_id' => 2,
+            'category_id' => 1,
             'description' => 'Professional cloud architect exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Google Cloud Platform.',
             'price' => 325.44,
             'image_path' => 'associate_cloud_engineer.png',
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         DB::table('exams')->insert([
             'name' => 'Professional Solutions Architect',
             'exam_date' => '2021-01-01',
-            'category_id' => 1,
+            'category_id' => 2,
             'description' => 'Prodessional Solutions Architect exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Amazon Web Services.',
             'price' => 125.00,
             'image_path' => 'associate_cloud_engineer.png',

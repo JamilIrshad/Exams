@@ -11,8 +11,8 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-        <div class="container">
-            <a class="navbar-brand text-primary h1" href="#">Exams CRUD</a>
+        <div class="container-fluid d-flex justify-content-center">
+            <a class="navbar-brand text-primary h1 ml-auto" href="#">Exams CRUD</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,12 +20,21 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{{route('exams.list')}}">Exams<span
-                                class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
+                    @if (Auth::user()->is_admin == 1)
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="{{route('exams.list')}}">Exams<span
+                                    class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
+                        </li>
+                    @endif
+                    <li class="nav-item justify-content-end">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+                        </form>
+
                     </li>
                 </ul>
             </div>
@@ -36,19 +45,24 @@
             @if (Session::has('success'))
                 <div class="alert alert-success">{{session('success')}}</div>
             @endif
-            <!-- Search bar -->
+            @if (Session::has('error'))
+                <div class="alert alert-danger">{{session('error')}}</div>
+            @endif
+            <!-- Search bar
             <div class="col-md-4">
                 <div class="card borde-0 shadow-lg">
                     <div class="card-header bg-dark text-light text-center">
-                        <h5>Exams List</h5>
+                        <h5>Search</h5>
                     </div>
                 </div>
-            </div>
-            <div class="row justify-content-center ms-1 mb-3">
-                <div class="col-md-12 d-flex justify-content-end">
-                    <a href="{{route('exams.create')}}" class="btn btn-warning border-black border-2">Add Exam</a>
+            </div> -->
+            @if (Auth::user()->is_admin == 1)
+                <div class="row justify-content-center ms-1 mb-3">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <a href="{{route('exams.create')}}" class="btn btn-warning border-black border-2">Add Exam</a>
+                    </div>
                 </div>
-            </div>
+            @endif
             <div class="col-md-12">
                 <div class="card borde-0 shadow-lg">
                     <div class="card-header bg-dark text-light text-center">
@@ -66,7 +80,9 @@
                                 <th></th>
                                 <th align-middle text-center>Price</th>
                                 <th></th>
-                                <th align-middle text-center ms-3>Actions</th>
+                                @if (Auth::user()->is_admin == 1)
+                                    <th align-middle text-center ms-3>Actions</th>
+                                @endif
                             </tr>
                             @if ($exams->isNotEmpty())
                                 @foreach ($exams as $exam)
@@ -83,15 +99,18 @@
                                         <td></td>
                                         <td class="align-middle">${{$exam->price}}</td>
                                         <td></td>
-                                        <td class="align-middle">
-                                            <a href="{{ route('exams.edit', $exam->id) }}"
-                                                class="btn btn-outline-success my-1">Update</a>
-                                            <form action="{{ route('exams.destroy', $exam) }}" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
-                                            </form>
-                                        </td>
+                                        @if (Auth::user()->is_admin == 1)
+                                            <td class="align-middle">
+                                                <a href="{{ route('exams.edit', $exam->id) }}"
+                                                    class="btn btn-outline-success my-1">Update</a>
+                                                <form action="{{ route('exams.destroy', $exam) }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
+                                                </form>
+                                            </td>
+                                        @endif
+
                                     </tr>
                                 @endforeach
 
