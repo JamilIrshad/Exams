@@ -9,6 +9,11 @@ class Exam extends Model
 {
     use HasFactory;
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     //accessor which add subdirectory path in imge path attribute
     public function getImagePathAttribute($value)
     {

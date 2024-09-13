@@ -15,12 +15,12 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name');
             $table->date('exam_date');
-            $table->string('category');
+            $table->unsignedInteger('category_id');
             $table->string('description');
             $table->decimal('price', 8, 2);
             $table->text('image_path');
             $table->timestamps();
-            $table->foreign('category')->references('name')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

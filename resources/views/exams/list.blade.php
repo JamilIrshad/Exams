@@ -31,15 +31,22 @@
             </div>
         </div>
     </nav>
-    <div class="container my-3">
+    <div class="container my-1">
         <div class="row d-flex justify-content-center">
             @if (Session::has('success'))
                 <div class="alert alert-success">{{session('success')}}</div>
             @endif
-            <div class="row justify-content-center m-3">
+            <!-- Search bar -->
+            <div class="col-md-4">
+                <div class="card borde-0 shadow-lg">
+                    <div class="card-header bg-dark text-light text-center">
+                        <h5>Exams List</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center ms-1 mb-3">
                 <div class="col-md-12 d-flex justify-content-end">
-                    <a href="{{route('exams.create')}}" class="btn btn-warning border-black border-2">Add
-                        Exam</a>
+                    <a href="{{route('exams.create')}}" class="btn btn-warning border-black border-2">Add Exam</a>
                 </div>
             </div>
             <div class="col-md-12">
@@ -55,9 +62,11 @@
                                 <th align-middle text-center>Name</th>
                                 <th align-middle text-center>Description</th>
                                 <th align-middle text-center>Exam Date</th>
-                                <th align-middle text-center>Category</th>
+                                <th align-middle>Category</th>
+                                <th></th>
                                 <th align-middle text-center>Price</th>
-                                <th align-middle text-center>Actions</th>
+                                <th></th>
+                                <th align-middle text-center ms-3>Actions</th>
                             </tr>
                             @if ($exams->isNotEmpty())
                                 @foreach ($exams as $exam)
@@ -70,8 +79,10 @@
                                         <td class="align-middle">{{$exam->name}}</td>
                                         <td class="align-middle">{{$exam->description}}</td>
                                         <td class="align-middle">{{$exam->exam_date}}</td>
-                                        <td class="align-middle text-center text-center">{{$exam->category}}</td>
+                                        <td class="align-middle text-center">{{$exam->category->name}}</td>
+                                        <td></td>
                                         <td class="align-middle">${{$exam->price}}</td>
+                                        <td></td>
                                         <td class="align-middle">
                                             <a href="{{ route('exams.edit', $exam->id) }}"
                                                 class="btn btn-outline-success my-1">Update</a>

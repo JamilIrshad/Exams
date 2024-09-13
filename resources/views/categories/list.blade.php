@@ -36,7 +36,7 @@
             @if (Session::has('success'))
                 <div class="alert alert-success">{{session('success')}}</div>
             @endif
-            <div class="row justify-content-center m-3">
+            <div class="row justify-content-center ms-1 mb-3">
                 <div class="col-md-8 d-flex justify-content-end">
                     <a href="{{route('categories.create')}}" class="btn btn-warning border-black border-2">Add
                         Category</a>

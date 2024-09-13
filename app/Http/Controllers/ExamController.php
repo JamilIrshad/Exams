@@ -14,8 +14,7 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $exams = Exam::orderBy('id', 'asc')->get();
-        // dd($exams->toArray());
+        $exams = Exam::get();
         return view('exams.list', ['exams' => $exams]);
     }
 
@@ -34,7 +33,7 @@ class ExamController extends Controller
         $exam->description = $request->description;
         $exam->exam_date = $request->exam_date;
         $exam->price = $request->price;
-        $exam->category = $request->category;
+        $exam->category_id = $request->category;
 
 
         //instead of public uploads folder, storage folder should be used.
@@ -90,7 +89,7 @@ class ExamController extends Controller
         $exam->price = $request->price;
 
         //update exam category
-        $exam->category = $request->category;
+        $exam->category_id = $request->category;
 
         //only update image if changed
         if($request->image != null){

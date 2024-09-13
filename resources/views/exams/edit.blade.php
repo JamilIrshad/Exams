@@ -85,7 +85,7 @@
                                     <option selected disabled hidden>Select</option>
                                     @if ($categories->isNotEmpty())
                                         @foreach ($categories as $category)
-                                            <option value="{{$category->name}}" @if (old('category', $exam->category) == $category->name) selected @endif>{{$category->name}}</option>
+                                            <option value="{{$category->id}}" @if (old('category', $exam->category_id) == $category->id) selected @endif>{{$category->name}}</option>
                                         @endforeach
                                     @endif
                                 </select>

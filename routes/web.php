@@ -31,6 +31,6 @@ Route::post('/exams',[ExamController::class,'store'])->name('exams.store');
 //Route for editing exams
 Route::get('/exams/{exam}/edit',[ExamController::class,'edit'])->name('exams.edit');
 //Route for updating exams
-Route::post('/exams/{exam}',[ExamController::class,'update'])->name('exams.update');
+Route::put('/exams/{exam}',[ExamController::class,'update'])->name('exams.update');
 //Route for deleting exams
 Route::delete('/exams/{exam}',[ExamController::class,'destroy'])->name('exams.destroy');
