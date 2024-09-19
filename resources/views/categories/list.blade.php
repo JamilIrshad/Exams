@@ -18,7 +18,7 @@
             @endif
             @if (Auth::user()->is_admin == 1)
                 <div class="row justify-content-center ms-1 mb-3">
-                    <div class="col-md-8 d-flex justify-content-end">
+                    <div class="col-md-8 d-flex justify-content-end mt-1">
                         <a href="{{route('categories.create')}}" class="btn btn-warning border-black border-2">Add
                             Category</a>
                     </div>

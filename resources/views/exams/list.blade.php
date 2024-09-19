@@ -29,7 +29,7 @@
             </div> -->
             @if (Auth::user()->is_admin == 1)
                 <div class="row justify-content-center ms-1 mb-3">
-                    <div class="col-md-12 d-flex justify-content-end">
+                    <div class="col-md-12 d-flex justify-content-end mt-3">
                         <a href="{{route('exams.create')}}" class="btn btn-warning border-black border-2">Add Exam</a>
                     </div>
                 </div>

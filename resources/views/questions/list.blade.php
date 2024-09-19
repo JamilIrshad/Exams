@@ -28,7 +28,7 @@
                 </div>
             </div> -->
 
-            <div class="col-md-12 d-flex justify-content-between my-3">
+            <div class="col-md-12 d-flex justify-content-end my-3">
                 @if (Auth::user()->is_admin == 1)
                         <a href="{{route('questions.create')}}" class="btn btn-warning border-black border-2">Add
                             Question</a>

@@ -68,9 +68,9 @@ class QuestionController extends Controller
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('pdf.question', ['questions' => $questions, 'exam' => $exam->name]);
 
         $filename = "{$exam->name}_exams_questions.pdf";
-        return $pdf->stream($filename);
+        // return $pdf->stream($filename);
 
-        // return $pdf->download($filename);
+        return $pdf->download($filename);
     }
 
 
