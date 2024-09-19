@@ -13,9 +13,9 @@
 
 <body>
     <!-- Login form with laravel auth -->
-    <div class="container my-1">
+    <div class="container my-1 py-5">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-5">
+            <div class="col-md-5 mt-4">
                 <h1>Login Form</h1>
                 @if (Session::has('success'))
                     <div class="alert alert-success">{{session('success')}}</div>

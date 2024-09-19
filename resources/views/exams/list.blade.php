@@ -10,36 +10,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-        <div class="container-fluid d-flex justify-content-center">
-            <a class="navbar-brand text-primary h1 ml-auto" href="#">Exams CRUD</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    @if (Auth::user()->is_admin == 1)
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="{{route('exams.list')}}">Exams<span
-                                    class="sr-only"></span></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-light" href="{{route('categories.list')}}">Categories</a>
-                        </li>
-                    @endif
-                    <li class="nav-item justify-content-end">
-                        <form action="{{route('logout')}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger">Logout</button>
-                        </form>
-
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <x-navbar />
     <div class="container my-1">
         <div class="row d-flex justify-content-center">
             @if (Session::has('success'))
@@ -80,9 +51,8 @@
                                 <th></th>
                                 <th align-middle text-center>Price</th>
                                 <th></th>
-                                @if (Auth::user()->is_admin == 1)
-                                    <th align-middle text-center ms-3>Actions</th>
-                                @endif
+                                <th align-middle text-center ms-3>Actions</th>
+
                             </tr>
                             @if ($exams->isNotEmpty())
                                 @foreach ($exams as $exam)
@@ -99,8 +69,9 @@
                                         <td></td>
                                         <td class="align-middle">${{$exam->price}}</td>
                                         <td></td>
-                                        @if (Auth::user()->is_admin == 1)
-                                            <td class="align-middle">
+                                        <td class="align-middle">
+                                            @if (Auth::user()->is_admin == 1)
+
                                                 <a href="{{ route('exams.edit', $exam->id) }}"
                                                     class="btn btn-outline-success my-1">Update</a>
                                                 <form action="{{ route('exams.destroy', $exam) }}" method="POST">
@@ -108,8 +79,15 @@
                                                     @method('delete')
                                                     <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
                                                 </form>
-                                            </td>
-                                        @endif
+                                            @endif
+                                            <form action="{{ route('examquestion.list', $exam->id) }}" method="POST">
+                                                @csrf
+                                                @method('post')
+                                                <button type="submit" class="btn btn-outline-info my-1">View Questions</button>
+                                            </form>
+
+                                        </td>
+
 
                                     </tr>
                                 @endforeach
