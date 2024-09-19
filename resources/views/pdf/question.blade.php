@@ -4,46 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Questions</title>
+    <title>Download PDF</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
 </head>
 
 <body>
-    <x-navbar />
     <div class="container my-1">
         <div class="row d-flex justify-content-center">
-            @if (Session::has('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
-            @endif
-            @if (Session::has('error'))
-                <div class="alert alert-danger">{{session('error')}}</div>
-            @endif
-            <!-- Search bar
-            <div class="col-md-4">
-                <div class="card borde-0 shadow-lg">
-                    <div class="card-header bg-dark text-light text-center">
-                        <h5>Search</h5>
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="col-md-12 d-flex justify-content-between my-3">
-                @if (Auth::user()->is_admin == 1)
-                        <a href="{{route('questions.create')}}" class="btn btn-warning border-black border-2">Add
-                            Question</a>
-                    </div>
-                @endif
-
             <div class="col-md-12">
                 <div class="card borde-0 shadow-lg">
-                    <div class="card-header bg-dark text-light text-center">
-                        <h5>Questions List @if (isset($exam))
-                        for {{$exam}} Exam @endif
-                        </h5>
+                    <div class="card-headertext-white text-center">
+                        <h5>Questions List for {{$exam}} Exam</h5>
                     </div>
                     <div class="card-body">
-                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion accordion-flush open" id="accordionFlushExample">
                             @foreach ($questions as $question)
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
@@ -53,7 +29,7 @@
                                             <h6>{{$loop->index + 1 . '. '}} {{$question->question}}</h6>
                                         </button>
                                     </h2>
-                                    <div id="flush-collapse{{$loop->index}}" class="accordion-collapse collapse"
+                                    <div id="flush-collapse{{$loop->index}}" class="accordion-collapse collapse show"
                                         data-bs-parent="#accordionFlushExample">
                                         <div class="accordion-body">
                                             <div class="container">
@@ -65,8 +41,6 @@
                                                     <div class="col">
                                                         b) {{$question->option2}}
                                                     </div>
-                                                </div>
-                                                <div class="row my-3">
                                                     <div class="col">
                                                         c) {{$question->option3}}
                                                     </div>
@@ -122,6 +96,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+</body>
+
+</html>
 </body>
 
 </html>

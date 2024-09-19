@@ -51,6 +51,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
     //Route for storing new exams
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+
+    //get route for displaying pdf.question
+    Route::get('/questions/pdf/{exam}', [QuestionController::class, 'showpdf'])->name('questions.showPDF');
 });
 
 //Routes which require only auth middleware
@@ -65,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
     //route for displaying questions according to exam id using question controller
     Route::post('/questions/show/{exam}', [QuestionController::class, 'show'])->name('examquestion.list');
     
+    //post route of question controller for downloadPDF($id)
+    Route::post('/questions/downloadPDF/{exam}', [QuestionController::class, 'downloadPDF'])->name('questions.downloadPDF');
     
     //logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

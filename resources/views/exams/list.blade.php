@@ -80,10 +80,15 @@
                                                     <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
                                                 </form>
                                             @endif
-                                            <form action="{{ route('examquestion.list', $exam->id) }}" method="POST">
+                                            <form action="{{ route('examquestion.list', $exam) }}" method="POST">
                                                 @csrf
                                                 @method('post')
-                                                <button type="submit" class="btn btn-outline-info my-1">View Questions</button>
+                                                <button type="submit" class="btn btn-info my-1">View</button>
+                                            </form>
+                                            <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
+                                                @csrf
+                                                @method('post')
+                                                <button type="submit" class="btn btn-primary">Download</button>
                                             </form>
 
                                         </td>

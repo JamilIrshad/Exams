@@ -6,6 +6,7 @@ use App\Http\Requests\QuestionStoreRequest;
 use App\Models\Question;
 use App\Models\Exam;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class QuestionController extends Controller
 {
@@ -14,7 +15,6 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        // $questions = Question::where('exam_id', $id)->get();
         $questions = Question::get();
         //converting the string correct_answer to array
         foreach ($questions as $question) {
@@ -56,18 +56,37 @@ class QuestionController extends Controller
         return redirect()->route('questions.list')->with('success', 'Question created successfully');
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    // public function to download pdf of show questions
+    public function downloadPDF($exam)
     {
-        $questions = Question::where('exam_id', $id)->get();
+        $exam = Exam::findOrFail($exam);
+        $questions = Question::where('exam_id', $exam->id)->get();
         //converting the string correct_answer to array
         foreach ($questions as $question) {
             $question->correct_answer = explode(',', $question->correct_answer);
         }
-        return view('questions.list', ['questions' => $questions]);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('pdf.question', ['questions' => $questions, 'exam' => $exam->name]);
+
+        $filename = "{$exam->name}_exams_questions.pdf";
+        return $pdf->stream($filename);
+
+        // return $pdf->download($filename);
+    }
+
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($exam)
+    {
+        $exam = Exam::findOrFail($exam);
+        $questions = Question::where('exam_id', $exam->id)->get();
+        //converting the string correct_answer to array
+        foreach ($questions as $question) {
+            $question->correct_answer = explode(',', $question->correct_answer);
+        }
+        return view('questions.list', ['questions' => $questions, 'exam' => $exam->name]);
     }
 
     /**
@@ -93,4 +112,6 @@ class QuestionController extends Controller
     {
         //
     }
+
+
 }

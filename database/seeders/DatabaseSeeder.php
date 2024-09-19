@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('exams')->insert([
             'name' => 'Professional Solutions Architect',
-            'exam_date' => '2021-01-01',
+            'exam_date' => '2025-01-01',
             'category_id' => 2,
             'description' => 'Prodessional Solutions Architect exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Amazon Web Services.',
             'price' => 125.00,
