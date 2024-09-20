@@ -11,6 +11,7 @@
 
 <body>
     <x-navbar />
+    <x-search-bar />
     <div class="container my-1">
         <div class="row d-flex justify-content-center">
             @if (Session::has('success'))
@@ -19,14 +20,6 @@
             @if (Session::has('error'))
                 <div class="alert alert-danger">{{session('error')}}</div>
             @endif
-            <!-- Search bar
-            <div class="col-md-4">
-                <div class="card borde-0 shadow-lg">
-                    <div class="card-header bg-dark text-light text-center">
-                        <h5>Search</h5>
-                    </div>
-                </div>
-            </div> -->
             @if (Auth::user()->is_admin == 1)
                 <div class="row justify-content-center ms-1 mb-3">
                     <div class="col-md-12 d-flex justify-content-end mt-3">
@@ -41,61 +34,91 @@
                     </div>
                     <div class="card-body">
                         <table class="table">
-                            <tr>
-                                <th align-middle text-center></th>
-                                <th class="align-middle text-center text-center"></th> <!-- Image -->
-                                <th align-middle text-center>Name</th>
-                                <th align-middle text-center>Description</th>
-                                <th align-middle text-center>Exam Date</th>
-                                <th align-middle>Category</th>
-                                <th></th>
-                                <th align-middle text-center>Price</th>
-                                <th></th>
-                                <th align-middle text-center ms-3>Actions</th>
-
-                            </tr>
+                            @if ($exams->isEmpty())
+                                <div class="alert alert-danger">No exam found. Click on LOGO to purchase an exam.</div>
+                            @endif
                             @if ($exams->isNotEmpty())
-                                @foreach ($exams as $exam)
-                                    <tr>
-                                        <td class="align-middle text-center">{{$loop->iteration}}</td>
-                                        @if ($exam->image_path != "")
-                                            <td class="align-middle"><img src="{{asset($exam->image_path)}}" alt="" width="100"
-                                                    height="100"></td>
-                                        @endif
-                                        <td class="align-middle">{{$exam->name}}</td>
-                                        <td class="align-middle">{{$exam->description}}</td>
-                                        <td class="align-middle">{{$exam->exam_date}}</td>
-                                        <td class="align-middle text-center">{{$exam->category->name}}</td>
-                                        <td></td>
-                                        <td class="align-middle">${{$exam->price}}</td>
-                                        <td></td>
-                                        <td class="align-middle">
-                                            @if (Auth::user()->is_admin == 1)
+                                                    <tr>
+                                                        <th align-middle text-center></th>
+                                                        <th class="align-middle text-center text-center"></th> <!-- Image -->
+                                                        <th align-middle text-center>Name</th>
+                                                        <th align-middle text-center>Description</th>
+                                                        <th align-middle text-center>Exam Date</th>
+                                                        <th align-middle>Category</th>
+                                                        <th></th>
+                                                        <th align-middle text-center>Price</th>
+                                                        <th></th>
+                                                        <th align-middle text-center ms-3>Actions</th>
 
-                                                <a href="{{ route('exams.edit', $exam->id) }}"
-                                                    class="btn btn-outline-success my-1">Update</a>
-                                                <form action="{{ route('exams.destroy', $exam) }}" method="POST">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
-                                                </form>
-                                            @endif
-                                            <form action="{{ route('examquestion.list', $exam) }}" method="POST">
-                                                @csrf
-                                                @method('post')
-                                                <button type="submit" class="btn btn-info my-1">View</button>
-                                            </form>
-                                            <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
-                                                @csrf
-                                                @method('post')
-                                                <button type="submit" class="btn btn-primary">Download</button>
-                                            </form>
+                                                    </tr>
 
-                                        </td>
+                                                    @foreach ($exams as $exam)
 
+                                                                            <tr>
+                                                                                <td class="align-middle text-center">{{$loop->iteration}}</td>
+                                                                                @if ($exam->image_path != "")
+                                                                                    <td class="align-middle"><img src="{{asset($exam->image_path)}}" alt="" width="100"
+                                                                                            height="100"></td>
+                                                                                @endif
+                                                                                <td class="align-middle">{{$exam->name}}</td>
+                                                                                <td class="align-middle">{{$exam->description}}</td>
+                                                                                <td class="align-middle">{{$exam->exam_date}}</td>
+                                                                                <td class="align-middle text-center">{{$exam->category->name}}</td>
+                                                                                <td></td>
+                                                                                <td class="align-middle">${{$exam->price}}</td>
+                                                                                <td></td>
+                                                                                <td class="align-middle">
+                                                                                    @if (Auth::user()->is_admin == 1)
 
-                                    </tr>
-                                @endforeach
+                                                                                        <a href="{{ route('exams.edit', $exam->id) }}"
+                                                                                            class="btn btn-outline-success my-1">Update</a>
+                                                                                        <form action="{{ route('exams.destroy', $exam) }}" method="POST">
+                                                                                            @csrf
+                                                                                            @method('delete')
+                                                                                            <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
+                                                                                        </form>
+                                                                                    @endif
+                                                                                    @php
+                                                                                        $order = Auth::user()->orders()->whereHas('orderitems', function ($query) use ($exam) {
+                                                                                            $query->where('exam_id', $exam->id);
+                                                                                        })->first();
+                                                                                    @endphp
+                                                                                    @if (Auth::user()->is_admin != 1)
+                                                                                        @if ($order && $order->hasPayment())
+                                                                                            <form action="{{ route('examquestion.list', $exam) }}" method="POST">
+                                                                                                @csrf
+                                                                                                @method('post')
+                                                                                                <button type="submit" class="btn btn-info my-1">View</button>
+                                                                                            </form>
+                                                                                            <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
+                                                                                                @csrf
+                                                                                                @method('post')
+                                                                                                <button type="submit" class="btn btn-primary">Download</button>
+                                                                                            </form>
+                                                                                        @else
+                                                                                            <form action="{{ route('order.store', $exam) }}" method="POST">
+                                                                                                @csrf
+                                                                                                @method('post')
+                                                                                                <button type="submit" class="btn btn-success">Buy</button>
+                                                                                            </form>
+
+                                                                                        @endif
+                                                                                    @else
+                                                                                        <form action="{{ route('examquestion.list', $exam) }}" method="POST">
+                                                                                            @csrf
+                                                                                            @method('post')
+                                                                                            <button type="submit" class="btn btn-info my-1">View</button>
+                                                                                        </form>
+                                                                                        <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
+                                                                                            @csrf
+                                                                                            @method('post')
+                                                                                            <button type="submit" class="btn btn-primary">Download</button>
+                                                                                        </form>
+                                                                                    @endif
+
+                                                                                </td>
+                                                                            </tr>
+                                                    @endforeach
 
                             @endif
                         </table>

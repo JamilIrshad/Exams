@@ -5,6 +5,8 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +72,20 @@ Route::middleware(['auth'])->group(function () {
     
     //post route of question controller for downloadPDF($id)
     Route::post('/questions/downloadPDF/{exam}', [QuestionController::class, 'downloadPDF'])->name('questions.downloadPDF');
+
+    //search post route
+    Route::post('/search', [ExamController::class, 'search'])->name('search');
+
+    Route::get('/purchased', [ExamController::class, 'purchasedExams'])->name('purchased.exams');
+
+    //post route order controller store
+    Route::post('/order/{exam}', [OrderController::class, 'store'])->name('order.store');
+
+    //post route payment controller create
+    Route::post('/payment/{order}', [PaymentController::class, 'store'])->name('payment.store');
+
+    //route for declined payment
+    Route::post('/decline', [PaymentController::class, 'declined'])->name('payment.declined');
     
     //logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

@@ -24,10 +24,28 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Test User 2',
+            'email' => 'test2@tecspine.com',
+            'password' => Hash::make('test1234'),
+        ]);
+
+        User::factory()->create([
+            'name' => 'Admin User',
             'email' => 'admin@tecspine.com',
             'password' => Hash::make('admin1234'),
             'is_admin' => 1,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Test User3',
+            'email' => 'test3@tecspine.com',
+            'password' => Hash::make('test1234'),
+        ]);
+
+        User::factory()->create([
+            'name' => 'Test User4',
+            'email' => 'test4@tecspine.com',
+            'password' => Hash::make('test1234'),
         ]);
 
         //Category Seeder

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Requests;
+use Illuminate\Http\Request;
 use App\Models\Exam;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +25,7 @@ class ExamController extends Controller
     }
 
     public function store(ExamStoreRequest $request)
-    {   
+    {
 
         //DB Insertion
         $exam = new Exam();
@@ -67,7 +67,7 @@ class ExamController extends Controller
 
         //return the view with the found exam
         $categories = Category::orderBy('id', 'asc')->get();
-        return view('exams.edit', ['exam' => $exam,'categories' => $categories]);
+        return view('exams.edit', ['exam' => $exam, 'categories' => $categories]);
     }
 
     public function update($id, ExamStoreRequest $request)
@@ -81,7 +81,7 @@ class ExamController extends Controller
         $exam->description = $request->description;
 
         //only update date if changed
-        if($request->exam_date != null){
+        if ($request->exam_date != null) {
             $exam->exam_date = $request->exam_date;
         }
 
@@ -92,7 +92,7 @@ class ExamController extends Controller
         $exam->category_id = $request->category;
 
         //only update image if changed
-        if($request->image != null){
+        if ($request->image != null) {
             //delete the old image
             Storage::delete($exam->image_path);
 
@@ -114,7 +114,7 @@ class ExamController extends Controller
     }
 
     public function destroy($id)
-    {  
+    {
         //find the exam from db
         $exam = Exam::findorfail($id);
 
@@ -127,5 +127,32 @@ class ExamController extends Controller
 
         //redirect to list after successful deletion
         return redirect()->route('exams.list')->with('success', 'Exam deleted successfully');
+    }
+
+
+    public function search(Request $request)
+    {
+        // dd($request);
+        $searchterm = $request->search;
+        //search for exams where name and description is like the search query
+        $exams = Exam::where('name', 'like', '%' . $searchterm . '%')->orWhere('description', 'like', '%' . $searchterm . '%')->orWhereHas('category', function ($query) use ($searchterm) {
+            $query->where('categories.name', 'like', "%{$searchterm}%");
+        })->with('category')->get();
+        return view('exams.list', ['exams' => $exams]);
+    }
+
+    public function purchasedExams()
+    {
+        // Get those exams for which the user has an order and payment exists
+        $orders = auth()->user()->orders()->whereHas('payment')->with('orderitems.exam')->get();
+        $exams = $orders->flatMap(function ($order) {
+            return $order->orderitems->map(function ($orderItem) {
+                return $orderItem->exam;
+            });
+        })->unique('id');
+
+        // dd($exams);
+        
+        return view('exams.list', ['exams' => $exams]);
     }
 }
