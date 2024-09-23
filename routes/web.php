@@ -81,8 +81,14 @@ Route::middleware(['auth'])->group(function () {
     //post route order controller store
     Route::post('/order/{exam}', [OrderController::class, 'store'])->name('order.store');
 
-    //post route payment controller create
-    Route::post('/payment/{order}', [PaymentController::class, 'store'])->name('payment.store');
+
+    Route::get('/payment/success', [PaymentController::class, 'store'])->name('payment.store');
+
+    //payment declined route
+    Route::post('/payment/declined', [PaymentController::class, 'declined'])->name('payment.declined');
+
+    //route for displaying payment view
+    Route::get('/payment/{order}', [PaymentController::class, 'create'])->name('payment.create');
 
     //route for declined payment
     Route::post('/decline', [PaymentController::class, 'declined'])->name('payment.declined');

@@ -28,4 +28,9 @@ class Order extends Model
     {
         return $this->payment()->exists();
     }
+
+    public function exams()
+    {
+        return $this->through('order_items')->has('exams');
+    }   
 }

@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <table class="table">
                             @if ($exams->isEmpty())
-                                <div class="alert alert-danger">No exam found. Click on LOGO to purchase an exam.</div>
+                                <div class="alert alert-danger">No exam found.</div>
                             @endif
                             @if ($exams->isNotEmpty())
                                                     <tr>

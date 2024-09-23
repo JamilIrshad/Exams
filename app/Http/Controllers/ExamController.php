@@ -144,15 +144,36 @@ class ExamController extends Controller
     public function purchasedExams()
     {
         // Get those exams for which the user has an order and payment exists
-        $orders = auth()->user()->orders()->whereHas('payment')->with('orderitems.exam')->get();
-        $exams = $orders->flatMap(function ($order) {
-            return $order->orderitems->map(function ($orderItem) {
-                return $orderItem->exam;
-            });
-        })->unique('id');
+        $payments = auth()->user()->payments;
+        $orders = auth()->user()->orders;
+
+        $ordersWithPayments = $orders->filter(function ($order) use ($payments) {
+            return $payments->contains('order_id', $order->id);
+        });
+        foreach ($ordersWithPayments as $order) {
+            $exam = $order->orderitems->first()->exam;
+            //adding each exam into exams array
+            $exams[] = $exam;
+        }
+
+        //convert array to collection
+        $exams = collect($exams);
+        
+        
+        // dd($exams);
+        // dd($orders);
+        // dd($payments);
+
+        // $orders = auth()->user()->orders()->whereHas('payment')->with('orderitems.exam')->get();
+        // $exams = $orders->flatMap(function ($order) {
+        //     return $order->orderitems->map(function ($orderItem) {
+        //         return $orderItem->exam;
+        //     });
+        // })->unique('id');
+
 
         // dd($exams);
-        
+
         return view('exams.list', ['exams' => $exams]);
     }
 }

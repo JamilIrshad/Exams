@@ -46,7 +46,10 @@ class OrderController extends Controller
         // dd($orderitem);
         $orderitem->save();
         //redirect to payment view and pass order
-        return view('payments.create', ['order' => $order, 'exam' => $exam]);
+        // return view('payments.create', ['order' => $order, 'exam' => $exam]);
+
+        // dd($order);
+        return redirect()->route('payment.create', ['order' => $order->id]);
     }
 
     /**

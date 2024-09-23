@@ -19,15 +19,6 @@
             @if (Session::has('error'))
                 <div class="alert alert-danger">{{session('error')}}</div>
             @endif
-            <!-- Search bar
-            <div class="col-md-4">
-                <div class="card borde-0 shadow-lg">
-                    <div class="card-header bg-dark text-light text-center">
-                        <h5>Search</h5>
-                    </div>
-                </div>
-            </div> -->
-
             <div class="col-md-12 d-flex justify-content-end my-3">
                 @if (Auth::user()->is_admin == 1)
                         <a href="{{route('questions.create')}}" class="btn btn-warning border-black border-2">Add
