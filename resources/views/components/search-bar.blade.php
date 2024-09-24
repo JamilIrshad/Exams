@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row d-flex justify-content-center ms-1 mb-3">
-        <form action="{{route('search')}}" method="post">
-            @method('POST')
+        <form action="{{route('exams.list')}}" method="get">
+            @method('GET')
             @csrf
             <div class="input-group mt-3">
                 <input type="text" class="form-control w-70" placeholder="Search Exam" aria-label="search_exam"

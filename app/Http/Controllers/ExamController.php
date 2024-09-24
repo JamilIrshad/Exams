@@ -12,9 +12,21 @@ use App\Http\Requests\ExamStoreRequest;
 
 class ExamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $exams = Exam::get();
+
+        $searchterm = $request->search;
+        $query = Exam::query();
+
+        $query->when($searchterm, function ($query) use ($searchterm) {
+            $query->where('name', 'like', '%' . $searchterm . '%')
+                ->orWhere('description', 'like', '%' . $searchterm . '%')
+                ->orWhereHas('category', function ($query) use ($searchterm) {
+                    $query->where('categories.name', 'like', '%' . $searchterm . '%');
+                });
+        });
+
+        $exams = $query->with('category')->get();
         return view('exams.list', ['exams' => $exams]);
     }
 
@@ -158,8 +170,8 @@ class ExamController extends Controller
 
         //convert array to collection
         $exams = collect($exams);
-        
-        
+
+
         // dd($exams);
         // dd($orders);
         // dd($payments);

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\purchase;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Laravel\Cashier\Cashier;
@@ -50,7 +53,7 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+         
         $sessionId = $request->get('session_id');
         if($sessionId === null){
             return redirect()->intended('exams')->with('error', 'Payment declined. Try again later.');
@@ -61,13 +64,22 @@ class PaymentController extends Controller
             return redirect()->intended('exams')->with('error', 'Payment declined. Try again later.');
             
         }
-
         $orderId = $session['metadata']['order_id'] ?? null;
+
+        //send email to user
+        $order = Order::find($orderId);
+        Mail::to($request->user()->email)->send(new purchase($orderId, $order->orderItems->first()->exam));
+       // dd($request);
 
         $payment = new Payment();
         $payment->order_id = $orderId;
         $payment->provider = 'Stripe';
         $payment->save();
+
+        
+
+        // dd($email, $exam, $order);
+
 
         return redirect()->route('exams.list')->with('success', 'Payment successful');
 

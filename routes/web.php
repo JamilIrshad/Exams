@@ -8,6 +8,10 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
 
+//
+use App\Mail\purchase;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Route;
 
 //Routes which do not require any middleware
@@ -18,6 +22,24 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('authentic
 // Signup Route
 Route::get('/signup', [SignUpController::class, 'showSignUpForm'])->name('signup');
 Route::post('/signup', [SignUpController::class, 'register'])->name('register');
+
+Route::get('/mailable', function () {
+
+    $order = App\Models\Order::find(5);
+    $orderId= $order->id;
+    $exam = App\Models\Exam::find(1);
+    
+    // //assert that the mail is sent
+    // Mail::fake();
+ 
+ 
+    // // Assert that a mailable was sent...
+    // Mail::assertSent(purchase::class);
+
+    // // Mail::to('jamil.cena18@gmail.com')->send();
+    return new App\Mail\purchase(5, $exam);
+    // // return 'Test email sent!';
+});
 
 
 //routes group with auth and admin middleware
@@ -69,12 +91,12 @@ Route::middleware(['auth'])->group(function () {
 
     //route for displaying questions according to exam id using question controller
     Route::post('/questions/show/{exam}', [QuestionController::class, 'show'])->name('examquestion.list');
-    
+
     //post route of question controller for downloadPDF($id)
     Route::post('/questions/downloadPDF/{exam}', [QuestionController::class, 'downloadPDF'])->name('questions.downloadPDF');
 
     //search post route
-    Route::post('/search', [ExamController::class, 'search'])->name('search');
+    // Route::post('/search', [ExamController::class, 'search'])->name('search');
 
     Route::get('/purchased', [ExamController::class, 'purchasedExams'])->name('purchased.exams');
 
@@ -92,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
 
     //route for declined payment
     Route::post('/decline', [PaymentController::class, 'declined'])->name('payment.declined');
-    
+
     //logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
