@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ExamStoreRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
 
 
 class ExamController extends Controller
@@ -23,36 +24,63 @@ class ExamController extends Controller
     public function purchasedExams()
     {
         return view('exams.purchased');
+
     }
 
     //for ajax request
-    public function getExams()
+    public function getExams(Request $request)
     {
-        $exams = DB::table('categories as c')
-            ->join('exams as e', 'c.id', '=', 'e.category_id')
-            ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name', 'e.exam_date', 'e.price')
-            ->get();
+        //Data from datatable using ajax request
+        $data = $request->all();
+        $page_number = $data['start'] / $data['length'] + 1;
+        $page_length = $data['length'];
+        $skip = ($page_number - 1) * $page_length;
 
+        //query to get exams with category name
+        $query = DB::table('categories as c')
+            ->join('exams as e', 'c.id', '=', 'e.category_id')
+            ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name', 'e.exam_date', 'e.price');
+
+        // search using search term from datatable
+        if (!empty($data['search']['value'])) {
+            $search = $data['search']['value'];
+            $query->where(function ($q) use ($search) {
+                $q->where('e.name', 'like', "%{$search}%")
+                    ->orWhere('e.description', 'like', "%{$search}%")
+                    ->orWhere('c.name', 'like', "%{$search}%")
+                    ->orWhere('e.exam_date', 'like', "%{$search}%")
+                    ->orWhere('e.price', 'like', "%{$search}%");
+            });
+        }
+
+        // total records count
+        $recordsTotal = $query->count();
+
+        // sorting based on column name and column direction(asc,desc)
+        if (!empty($data['order'])) {
+            $columnIndex = $data['order'][0]['column'];
+            $columnName = $data['columns'][$columnIndex]['data'];
+            $columnSortOrder = $data['order'][0]['dir'];
+            $query->orderBy($columnName, $columnSortOrder);
+        }
+
+        // get records based on page length and skip previous pagination data
+        $exams = $query->skip($skip)->take($page_length)->get();
+
+        //format date and add buttons
         foreach ($exams as $exam) {
             $exam->exam_date = date('jS F Y', strtotime($exam->exam_date));
-
-            //Buttons for exam buying and view/downloading
             $exam->buttons = view('partials.exam_buttons', ['exam' => $exam])->render();
         }
 
-        // dd(response()->json($exams));
-        if ($exams) {
-            return response()->json([
-                'message' => "Data Found",
-                "code" => 200,
-                "data" => $exams
-            ]);
-        } else {
-            return response()->json([
-                'message' => "Internal Server Error",
-                "code" => 500
-            ]);
-        }
+        // ajax response back to datatable
+        $response = [
+            'draw' => $data['draw'],
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsTotal,
+            'data' => $exams,
+        ];
+        return response()->json($response, Response::HTTP_OK);
     }
 
     public function getPurchased()
@@ -61,7 +89,7 @@ class ExamController extends Controller
         $user = auth()->user();
         $exams = [];
 
-        $ordersWithPayments = $user->orders->filter(function ($order) use ($user) {
+        $ordersWithPayments = auth()->user()->orders->filter(function ($order) use ($user) {
             return $user->payments->contains('order_id', $order->id);
         });
 
@@ -156,13 +184,13 @@ class ExamController extends Controller
 
         //only update image if changed
         if ($request->image != null) {
-           //delete the old image
-           Storage::delete($exam->image_path);
+            //delete the old image
+            Storage::delete($exam->image_path);
 
-           //New Image moving to uploads folder
-           $image_path = $request->file('image')->store('exams');
-           //Save uploads path to DB
-           $exam->image_path = $image_path;
+            //New Image moving to uploads folder
+            $image_path = $request->file('image')->store('exams');
+            //Save uploads path to DB
+            $exam->image_path = $image_path;
         }
 
         $exam->save();

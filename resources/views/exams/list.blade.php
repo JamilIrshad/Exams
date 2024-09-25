@@ -73,6 +73,10 @@
         $(document).ready(function () {
 
             var table = $('#datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: true,
+                lengthMenu: [[10, 25, 50, 100, 200], ["10 entries", "25 entries", "50 entries", "100 entries", "200 entries"]],
                 "language": {
                     "infoEmpty": "No exams available."
                 },
