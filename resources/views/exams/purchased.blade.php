@@ -66,24 +66,19 @@
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
     <script>
-        var storageUrl = "{{ asset('exams') }}"; // Base URL for storage
-        storageUrl = storageUrl.slice(0, -'/exams'.length);
-    </script>
-    <script>
         $(document).ready(function () {
-
             var table = $('#datatable').DataTable({
                 "language": {
-                    "infoEmpty": "No exams available."
+                    "infoEmpty": "No exam purchased yet."
                 },
-                ajax: "{{url('getexams')}}",
+                ajax: "{{url('getpurchased')}}",
                 columns: [
                     { "data": "id" },
                     {
                         "data": "image_path",
                         "orderable": false,
                         "render": function (data, type, row) {
-                            return "<img src='" + storageUrl + "/" + data + "' height='80' width='80'/>";
+                            return "<img src=\"" + data + "\" height=\"80\" width=\"80\"/>";
                         }
                     },
                     { "data": "name" },

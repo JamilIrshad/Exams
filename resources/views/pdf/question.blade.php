@@ -19,6 +19,12 @@
                         <h5>Questions List for {{$exam}} Exam</h5>
                     </div>
                     <div class="card-body">
+                        @if ($questions->isEmpty())
+                            <div class="alert alert-danger" role="alert">
+                                No questions found for this exam.
+                            </div>
+                        
+                        @endif
                         <div class="accordion accordion-flush open" id="accordionFlushExample">
                             @foreach ($questions as $question)
                                 <div class="accordion-item">

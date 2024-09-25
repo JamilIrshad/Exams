@@ -82,6 +82,8 @@ class QuestionController extends Controller
     {
         $exam = Exam::findOrFail($exam);
         $questions = Question::where('exam_id', $exam->id)->get();
+        //if questions is empty then redirect back
+        // dd($questions);
         //converting the string correct_answer to array
         foreach ($questions as $question) {
             $question->correct_answer = explode(',', $question->correct_answer);

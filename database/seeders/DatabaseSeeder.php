@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
             'category_id' => 1,
             'description' => 'Associate Cloud Engineer exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Google Cloud Platform.',
             'price' => 125.00,
-            'image_path' => '1726840190.png',
+            'image_path' => 'exams/1726840190.png',
         ]);
         //also add this exam into stripe as a price id
 
@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
             'category_id' => 1,
             'description' => 'Professional cloud architect exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Google Cloud Platform.',
             'price' => 325.44,
-            'image_path' => '1726840200.png',
+            'image_path' => 'exams/1726840200.png',
         ]);
 
         DB::table('exams')->insert([
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
             'category_id' => 4,
             'description' => 'Terraform exam tests your ability to deploy applications, monitor operations, and maintain cloud projects using terraform on Google Cloud Platform.',
             'price' => 225.00,
-            'image_path' => '1726840208.webp',
+            'image_path' => 'exams/1726840208.webp',
         ]);
 
         DB::table('exams')->insert([
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
             'category_id' => 2,
             'description' => 'Prodessional Solutions Architect exam tests your ability to deploy applications, monitor operations, and maintain cloud projects on Amazon Web Services.',
             'price' => 125.00,
-            'image_path' => '1726840217.png',
+            'image_path' => 'exams/1726840217.png',
         ]);
 
 

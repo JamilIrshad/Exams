@@ -92,14 +92,16 @@ Route::middleware(['auth'])->group(function () {
     //Route for getting exams using ajax
     Route::get('/getexams', [ExamController::class, 'getExams'])->name('exams.get');
 
+    //route for getting questions using ajax
+    Route::get('/getpurchased', [ExamController::class, 'getPurchased'])->name('purchased.get');
+
+
     //route for displaying questions according to exam id using question controller
     Route::post('/questions/show/{exam}', [QuestionController::class, 'show'])->name('examquestion.list');
 
     //post route of question controller for downloadPDF($id)
     Route::post('/questions/downloadPDF/{exam}', [QuestionController::class, 'downloadPDF'])->name('questions.downloadPDF');
 
-    //search post route
-    // Route::post('/search', [ExamController::class, 'search'])->name('search');
 
     Route::get('/purchased', [ExamController::class, 'purchasedExams'])->name('purchased.exams');
 

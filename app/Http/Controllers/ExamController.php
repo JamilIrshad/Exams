@@ -13,50 +13,76 @@ use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
+    //to display exams view
     public function index(Request $request)
     {
+        return view('exams.list');
+    }
 
-        $searchterm = $request->search;
-        $query = Exam::query();
-
-        $query->when($searchterm, function ($query) use ($searchterm) {
-            $query->where('name', 'like', '%' . $searchterm . '%')
-                ->orWhere('description', 'like', '%' . $searchterm . '%')
-                ->orWhereHas('category', function ($query) use ($searchterm) {
-                    $query->where('categories.name', 'like', '%' . $searchterm . '%');
-                });
-        });
-
-        $exams = $query->with('category')->get();
-        
-        // dd($exams);
-        return view('exams.list', ['exams' => $exams]);
+    //to display questions view
+    public function purchasedExams()
+    {
+        return view('exams.purchased');
     }
 
     //for ajax request
     public function getExams()
     {
-        // $exams = Exam::select('exams.id', 'image_path', 'exams.name', 'exams.description', 'categories.name', 'exam_date', 'price')->join('categories', 'categories.id', '=', 'exams.category_id')->get();
         $exams = DB::table('categories as c')
-        ->join('exams as e', 'c.id', '=', 'e.category_id')
-        ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name','e.exam_date', 'e.price')
-        ->get();
-        foreach($exams as $exam) {
+            ->join('exams as e', 'c.id', '=', 'e.category_id')
+            ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name', 'e.exam_date', 'e.price')
+            ->get();
+
+        foreach ($exams as $exam) {
             $exam->exam_date = date('jS F Y', strtotime($exam->exam_date));
+
+            //Buttons for exam buying and view/downloading
+            $exam->buttons = view('partials.exam_buttons', ['exam' => $exam])->render();
         }
 
-        
         // dd(response()->json($exams));
-        if($exams) {
+        if ($exams) {
             return response()->json([
                 'message' => "Data Found",
-                "code"    => 200,
-                "data"  => $exams
+                "code" => 200,
+                "data" => $exams
             ]);
-        } else  {
+        } else {
             return response()->json([
                 'message' => "Internal Server Error",
-                "code"    => 500
+                "code" => 500
+            ]);
+        }
+    }
+
+    public function getPurchased()
+    {
+        // Get those exams for which the user has an order and payment exists
+        $user = auth()->user();
+        $exams = [];
+
+        $ordersWithPayments = $user->orders->filter(function ($order) use ($user) {
+            return $user->payments->contains('order_id', $order->id);
+        });
+
+        foreach ($ordersWithPayments as $order) {
+            $exam = $order->orderitems->first()->exam;
+            $exam->category_name = $exam->category->name;
+            $exam->exam_date = date('jS F Y', strtotime($exam->exam_date));
+            $exam->buttons = view('partials.exam_buttons', ['exam' => $exam])->render();
+            $exams[] = $exam;
+        }
+
+        if (!empty($exams)) {
+            return response()->json([
+                'message' => "Data Found",
+                "code" => 200,
+                "data" => $exams
+            ]);
+        } else {
+            return response()->json([
+                'message' => "No Data Found",
+                "code" => 404
             ]);
         }
     }
@@ -82,13 +108,7 @@ class ExamController extends Controller
         //instead of public uploads folder, storage folder should be used.
 
         if ($request->image != "") {
-            //Image moving to uploads folder
-            $image = $request->image;
-            $ext = $image->getClientOriginalExtension();
-            $image_path = time() . '.' . $ext;
-            // $image->move(public_path('uploads/exams'), $image_name);
-            //put file in storage
-            Storage::putFileAs('exams', $image, $image_path);
+            $image_path = $request->file('image')->store('exams');
 
             //Save uploads path to DB
             $exam->image_path = $image_path;
@@ -136,17 +156,13 @@ class ExamController extends Controller
 
         //only update image if changed
         if ($request->image != null) {
-            //delete the old image
-            Storage::delete($exam->image_path);
+           //delete the old image
+           Storage::delete($exam->image_path);
 
-            //New Image moving to uploads folder
-            $image = $request->image;
-            $ext = $image->getClientOriginalExtension();
-            $image_path = time() . '.' . $ext;
-            Storage::putFileAs('exams', $image, $image_path);
-
-            //Save new image path to DB
-            $exam->image_path = $image_path;
+           //New Image moving to uploads folder
+           $image_path = $request->file('image')->store('exams');
+           //Save uploads path to DB
+           $exam->image_path = $image_path;
         }
 
         $exam->save();
@@ -181,29 +197,6 @@ class ExamController extends Controller
         $exams = Exam::where('name', 'like', '%' . $searchterm . '%')->orWhere('description', 'like', '%' . $searchterm . '%')->orWhereHas('category', function ($query) use ($searchterm) {
             $query->where('categories.name', 'like', "%{$searchterm}%");
         })->with('category')->get();
-        return view('exams.list', ['exams' => $exams]);
-    }
-
-    public function purchasedExams()
-    {
-        // Get those exams for which the user has an order and payment exists
-        $payments = auth()->user()->payments;
-        $orders = auth()->user()->orders;
-
-        $ordersWithPayments = $orders->filter(function ($order) use ($payments) {
-            return $payments->contains('order_id', $order->id);
-        });
-        foreach ($ordersWithPayments as $order) {
-            $exam = $order->orderitems->first()->exam;
-            //adding each exam into exams array
-            $exams[] = $exam;
-        }
-
-        //convert array to collection
-        $exams = collect($exams);
-
-
-
         return view('exams.list', ['exams' => $exams]);
     }
 }

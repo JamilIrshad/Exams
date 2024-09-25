@@ -34,6 +34,11 @@
                         </h5>
                     </div>
                     <div class="card-body">
+                        @if ($questions->isEmpty())
+                            <div class="alert alert-danger" role="alert">
+                                No questions found for this exam. Contact Admin to add questions.
+                            </div>
+                        @endif
                         <div class="accordion accordion-flush" id="accordionFlushExample">
                             @foreach ($questions as $question)
                                 <div class="accordion-item">
