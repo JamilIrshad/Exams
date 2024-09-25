@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Exam;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -280,5 +281,8 @@ class DatabaseSeeder extends Seeder
             'option4' => 'Amazon RDS',
             'correct_answer' => '1,3',
         ]);
+
+        //add 30 exams with examfactory
+        $exams = Exam::factory(30)->create();
     }
 }

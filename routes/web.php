@@ -89,6 +89,9 @@ Route::middleware(['auth'])->group(function () {
     //Route for displaying exams
     Route::get('/exams', [ExamController::class, 'index'])->name('exams.list');
 
+    //Route for getting exams using ajax
+    Route::get('/getexams', [ExamController::class, 'getExams'])->name('exams.get');
+
     //route for displaying questions according to exam id using question controller
     Route::post('/questions/show/{exam}', [QuestionController::class, 'show'])->name('examquestion.list');
 

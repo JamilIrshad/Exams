@@ -7,6 +7,9 @@
     <title>All Exams</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.bootstrap5.css" class="stylesheet">
+
 </head>
 
 <body>
@@ -33,94 +36,20 @@
                         <h5>Exams List</h5>
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            @if ($exams->isEmpty())
-                                <div class="alert alert-danger">No exam found.</div>
-                            @endif
-                            @if ($exams->isNotEmpty())
-                                                    <tr>
-                                                        <th align-middle text-center></th>
-                                                        <th class="align-middle text-center text-center"></th> <!-- Image -->
-                                                        <th align-middle text-center>Name</th>
-                                                        <th align-middle text-center>Description</th>
-                                                        <th align-middle text-center>Exam Date</th>
-                                                        <th align-middle>Category</th>
-                                                        <th></th>
-                                                        <th align-middle text-center>Price</th>
-                                                        <th></th>
-                                                        <th align-middle text-center ms-3>Actions</th>
+                        <table class="table" id="datatable">
+                            <thead>
+                                <tr>
+                                    <th align-middle text-center></th>
+                                    <th class="align-middle text-center text-center"></th> <!-- Image -->
+                                    <th align-middle text-center>Name</th>
+                                    <th align-middle text-center>Description</th>
+                                    <th align-middle text-center>Exam Date</th>
+                                    <th align-middle>Category</th>
+                                    <th align-middle text-center>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
 
-                                                    </tr>
-
-                                                    @foreach ($exams as $exam)
-
-                                                                            <tr>
-                                                                                <td class="align-middle text-center">{{$loop->iteration}}</td>
-                                                                                @if ($exam->image_path != "")
-                                                                                    <td class="align-middle"><img src="{{asset($exam->image_path)}}" alt="" width="100"
-                                                                                            height="100"></td>
-                                                                                @endif
-                                                                                <td class="align-middle">{{$exam->name}}</td>
-                                                                                <td class="align-middle">{{$exam->description}}</td>
-                                                                                <td class="align-middle">{{$exam->exam_date}}</td>
-                                                                                <td class="align-middle text-center">{{$exam->category->name}}</td>
-                                                                                <td></td>
-                                                                                <td class="align-middle">${{$exam->price}}</td>
-                                                                                <td></td>
-                                                                                <td class="align-middle">
-                                                                                    @if (Auth::user()->is_admin == 1)
-
-                                                                                        <a href="{{ route('exams.edit', $exam->id) }}"
-                                                                                            class="btn btn-outline-success my-1">Update</a>
-                                                                                        <form action="{{ route('exams.destroy', $exam) }}" method="POST">
-                                                                                            @csrf
-                                                                                            @method('delete')
-                                                                                            <button type="submit" class="btn btn-outline-danger my-1">Delete</button>
-                                                                                        </form>
-                                                                                    @endif
-                                                                                    @php
-                                                                                        $order = Auth::user()->orders()->whereHas('orderitems', function ($query) use ($exam) {
-                                                                                            $query->where('exam_id', $exam->id);
-                                                                                        })->first();
-                                                                                    @endphp
-                                                                                    @if (Auth::user()->is_admin != 1)
-                                                                                        @if ($order && $order->hasPayment())
-                                                                                            <form action="{{ route('examquestion.list', $exam) }}" method="POST">
-                                                                                                @csrf
-                                                                                                @method('post')
-                                                                                                <button type="submit" class="btn btn-info my-1">View</button>
-                                                                                            </form>
-                                                                                            <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
-                                                                                                @csrf
-                                                                                                @method('post')
-                                                                                                <button type="submit" class="btn btn-primary">Download</button>
-                                                                                            </form>
-                                                                                        @else
-                                                                                            <form action="{{ route('order.store', $exam) }}" method="POST">
-                                                                                                @csrf
-                                                                                                @method('post')
-                                                                                                <button type="submit" class="btn btn-success">Buy</button>
-                                                                                            </form>
-
-                                                                                        @endif
-                                                                                    @else
-                                                                                        <form action="{{ route('examquestion.list', $exam) }}" method="POST">
-                                                                                            @csrf
-                                                                                            @method('post')
-                                                                                            <button type="submit" class="btn btn-info my-1">View</button>
-                                                                                        </form>
-                                                                                        <form action="{{ route('questions.downloadPDF', $exam) }}" method="POST">
-                                                                                            @csrf
-                                                                                            @method('post')
-                                                                                            <button type="submit" class="btn btn-primary">Download</button>
-                                                                                        </form>
-                                                                                    @endif
-
-                                                                                </td>
-                                                                            </tr>
-                                                    @endforeach
-
-                            @endif
                         </table>
                     </div>
                 </div>
@@ -128,10 +57,38 @@
         </div>
     </div>
 
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // $('#datatable').DataTable();
+            var table = $('#datatable').DataTable({
+                ajax: "{{url('getexams')}}",
+                columns: [
+                    { "data": "id" },
+                    {
+                        "data": "image_path",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return "<img src=\"/exams/" + data + "\" height=\"80\" width=\"80\"/>";
+                        }
+                    },
+                    { "data": "name" },
+                    { "data": "description", orderable: false },
+                    { "data": "exam_date" },
+                    { "data": "category_name" },
+                    { "data": "price", render: $.fn.dataTable.render.number(',', '.', 2, '$') }
+                ]
+            });
+        });
+    </script>
 </body>
 
 </html>

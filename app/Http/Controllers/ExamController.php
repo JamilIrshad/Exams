@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ExamStoreRequest;
+use Illuminate\Support\Facades\DB;
 
 
 class ExamController extends Controller
@@ -27,7 +28,37 @@ class ExamController extends Controller
         });
 
         $exams = $query->with('category')->get();
+        
+        // dd($exams);
         return view('exams.list', ['exams' => $exams]);
+    }
+
+    //for ajax request
+    public function getExams()
+    {
+        // $exams = Exam::select('exams.id', 'image_path', 'exams.name', 'exams.description', 'categories.name', 'exam_date', 'price')->join('categories', 'categories.id', '=', 'exams.category_id')->get();
+        $exams = DB::table('categories as c')
+        ->join('exams as e', 'c.id', '=', 'e.category_id')
+        ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name','e.exam_date', 'e.price')
+        ->get();
+        foreach($exams as $exam) {
+            $exam->exam_date = date('jS F Y', strtotime($exam->exam_date));
+        }
+
+        
+        // dd(response()->json($exams));
+        if($exams) {
+            return response()->json([
+                'message' => "Data Found",
+                "code"    => 200,
+                "data"  => $exams
+            ]);
+        } else  {
+            return response()->json([
+                'message' => "Internal Server Error",
+                "code"    => 500
+            ]);
+        }
     }
 
     public function create()
@@ -172,19 +203,6 @@ class ExamController extends Controller
         $exams = collect($exams);
 
 
-        // dd($exams);
-        // dd($orders);
-        // dd($payments);
-
-        // $orders = auth()->user()->orders()->whereHas('payment')->with('orderitems.exam')->get();
-        // $exams = $orders->flatMap(function ($order) {
-        //     return $order->orderitems->map(function ($orderItem) {
-        //         return $orderItem->exam;
-        //     });
-        // })->unique('id');
-
-
-        // dd($exams);
 
         return view('exams.list', ['exams' => $exams]);
     }
