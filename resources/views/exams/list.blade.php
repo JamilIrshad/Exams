@@ -79,10 +79,70 @@
         $(document).ready(function () {
 
             var table = $('#datatable').DataTable({
+                initComplete: function () {
+                    //add div container at the end of div with class="row mt-2 justify-content-between"
+                    let div = document.createElement('div');
+                    div.className = 'container d-flex flex-row mt-4 justify-content-end flex-nonwrap';
+                    document.querySelector('.row.mt-2.justify-content-between').appendChild(div);
+
+                    //input group for category sort dropdown
+                    let input_group = document.createElement('div');
+                    input_group.className = 'input-group w-auto';
+                    div.appendChild(input_group);
+
+                    // Create label element
+                    let label = document.createElement('label');
+                    label.htmlFor = 'category';
+                    label.className = 'input-group-text';
+                    label.innerHTML = 'Category';
+                    input_group.appendChild(label);
+
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.add(new Option(''));
+                    select.id = 'category';
+                    select.className = 'form-select order-3 w-auto';
+                    input_group.appendChild(select);
+
+
+                    //get select options from backend using ajax
+                    jQuery('#category').on('change', function () {
+                        var category = jQuery(this).val();
+                        table.ajax.url("{{url('getexams')}}?category=" + category).load();
+                    });
+
+                    // add options to select from categories table
+                    $.ajax({
+                        url: "{{url('getcategories')}}",
+                        type: 'GET',
+                        success: function (data) {
+                            data.forEach(function (category) {
+                                var option = new Option(category.name, category.name);
+                                select.add(option);
+                            });
+                        },
+
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+
+                    //responsive design
+                    //add class input-group in dt-select class
+                    document.querySelector('.dt-search').classList.add('input-group');
+                    document.querySelector('label[for="dt-search-0"]').classList.add('input-group-text');
+
+                    document.querySelector('.dt-length').classList.add('input-group');
+                    document.querySelector('label[for="dt-length-0"]').classList.add('input-group-text');
+
+                    document.querySelector('select[name="datatable_length"]').classList.add('m-0');
+
+                },
+
                 processing: true,
                 serverSide: true,
                 searching: true,
-                lengthMenu: [[10, 25, 50, 100, 200], ["10 entries", "25 entries", "50 entries", "100 entries", "200 entries"]],
+                lengthMenu: [[10, 25, 50, 100, 200], ["10", "25", "50", "100", "200"]],
                 "language": {
                     "infoEmpty": "No exams available."
                 },

@@ -55,6 +55,11 @@ class ExamController extends Controller
             });
         }
 
+        // get records based on category name
+        if (!empty($data['category'])) {
+            $query->where('c.name', $data['category']);
+        }
+
         // total records count
         $recordsTotal = $query->count();
 

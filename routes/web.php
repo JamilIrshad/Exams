@@ -95,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
     //Route for getting exams using ajax
     Route::get('/getexams', [ExamController::class, 'getExams'])->name('exams.get');
 
+    Route::get('/getcategories', [CategoryController::class, 'getcategories'])->name('categories.get');
+
+
     //route for getting questions using ajax
     Route::get('/getpurchased', [ExamController::class, 'getPurchased'])->name('purchased.get');
 

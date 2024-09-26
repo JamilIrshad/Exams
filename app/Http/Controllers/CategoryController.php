@@ -16,6 +16,12 @@ class CategoryController extends Controller
         return view('categories.list', ['categories' => $categories]);
     }
 
+    public function getcategories()
+    {
+        $categories = Category::select('name')->orderBy('name', 'asc')->get();
+        return response()->json($categories);
+    }
+
     public function create()
     {
         return view('categories.create');
