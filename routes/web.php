@@ -3,15 +3,13 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\SignUpController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
-
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\SignUpController;
 //
 use App\Mail\purchase;
 use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Support\Facades\Route;
 
 //Routes which do not require any middleware
@@ -26,13 +24,12 @@ Route::post('/signup', [SignUpController::class, 'register'])->name('register');
 Route::get('/mailable', function () {
 
     $order = App\Models\Order::find(5);
-    $orderId= $order->id;
+    $orderId = $order->id;
     $exam = App\Models\Exam::find(1);
-    
+
     // //assert that the mail is sent
     // Mail::fake();
- 
- 
+
     // // Assert that a mailable was sent...
     // Mail::assertSent(purchase::class);
 
@@ -40,7 +37,6 @@ Route::get('/mailable', function () {
     return new App\Mail\purchase(5, $exam);
     // // return 'Test email sent!';
 });
-
 
 //routes group with auth and admin middleware
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -80,14 +76,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/questions/pdf/{exam}', [QuestionController::class, 'showpdf'])->name('questions.showPDF');
 
     //Export exams
-    Route::get('/exams/export',[ExamController::class,'export'])->name('exams.export');
+    Route::get('/exams/export', [ExamController::class, 'export'])->name('exams.export');
 });
 
 //Routes which require only auth middleware
 Route::middleware(['auth'])->group(function () {
     //Route for displaying home page
     Route::get('/', [ExamController::class, 'index']);
-
 
     //Route for displaying exams
     Route::get('/exams', [ExamController::class, 'index'])->name('exams.list');
@@ -97,10 +92,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/getcategories', [CategoryController::class, 'getcategories'])->name('categories.get');
 
-
     //route for getting questions using ajax
     Route::get('/getpurchased', [ExamController::class, 'getPurchased'])->name('purchased.get');
-
 
     //route for displaying questions according to exam id using question controller
     Route::post('/questions/show/{exam}', [QuestionController::class, 'show'])->name('examquestion.list');
@@ -108,12 +101,10 @@ Route::middleware(['auth'])->group(function () {
     //post route of question controller for downloadPDF($id)
     Route::post('/questions/downloadPDF/{exam}', [QuestionController::class, 'downloadPDF'])->name('questions.downloadPDF');
 
-
     Route::get('/purchased', [ExamController::class, 'purchasedExams'])->name('purchased.exams');
 
     //post route order controller store
     Route::post('/order/{exam}', [OrderController::class, 'store'])->name('order.store');
-
 
     Route::get('/payment/success', [PaymentController::class, 'store'])->name('payment.store');
 
@@ -130,6 +121,3 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 });
-
-
-

@@ -16,12 +16,7 @@
     <x-navbar />
     <div class="container my-1">
         <div class="row d-flex justify-content-center">
-            @if (Session::has('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
-            @endif
-            @if (Session::has('error'))
-                <div class="alert alert-danger">{{session('error')}}</div>
-            @endif
+            <x-alerts />
             @if (Auth::user()->is_admin == 1)
                 <div class="row justify-content-center ms-1 mb-3">
                     <div class="col-md-12 d-flex justify-content-end mt-3">
@@ -65,6 +60,13 @@
 
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 1500);
+        });
+    </script>
     <script>
         $(document).ready(function () {
             var table = $('#datatable').DataTable({

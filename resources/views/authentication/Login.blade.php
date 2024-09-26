@@ -10,19 +10,13 @@
 
 
 </head>
-
 <body>
     <!-- Login form with laravel auth -->
     <div class="container my-1 py-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-5 mt-4">
+                <x-alerts />
                 <h1>Login Form</h1>
-                @if (Session::has('success'))
-                    <div class="alert alert-success">{{session('success')}}</div>
-                @endif
-                @if (Session::has('error'))
-                    <div class="alert alert-danger">{{session('error')}}</div>
-                @endif
                 <form action="{{route('login')}}" method="post">
                     @csrf
                     <div>
@@ -55,6 +49,8 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
-
 </html>

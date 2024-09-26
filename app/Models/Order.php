@@ -24,7 +24,7 @@ class Order extends Model
         return $this->hasOne(Payment::class);
     }
 
-     public function hasPayment()
+    public function hasPayment()
     {
         return $this->payment()->exists();
     }
@@ -32,5 +32,5 @@ class Order extends Model
     public function exams()
     {
         return $this->through('order_items')->has('exams');
-    }   
+    }
 }

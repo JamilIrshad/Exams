@@ -29,7 +29,7 @@ class QuestionStoreRequest extends FormRequest
             'option2' => 'required',
             'option3' => 'required',
             'option4' => 'required',
-            'checkboxes' => 'required'
+            'checkboxes' => 'required',
         ];
     }
 
@@ -43,8 +43,8 @@ class QuestionStoreRequest extends FormRequest
             'option1.required' => 'Option 1 is required.',
             'option2.required' => 'Option 2 is required.',
             'option3.required' => 'Option 3 is required.',
-            'option4.required' => 'Option 4 is required.', 
-            'checkboxes.required' => 'Atleast one option should be selected.'
+            'option4.required' => 'Option 4 is required.',
+            'checkboxes.required' => 'Atleast one option should be selected.',
         ];
     }
 }

@@ -23,7 +23,7 @@ class CategoryStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3',
-            'description' => 'required|string|min:10'
+            'description' => 'required|string|min:10',
         ];
     }
 
@@ -33,7 +33,7 @@ class CategoryStoreRequest extends FormRequest
             'name.required' => 'Name is required.',
             'name.min' => 'Name should be minimum of 3 characters.',
             'description.required' => 'Description is required.',
-            'description.min' => 'Description should be minimum of 10 characters.'
+            'description.min' => 'Description should be minimum of 10 characters.',
         ];
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User; // Add this line to import the User class
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator; // Add this line to import the Validator class
-use Illuminate\Support\Facades\Hash; // Add this line to import the Hash class
+use Illuminate\Support\Facades\Hash; // Add this line to import the Validator class
+use Illuminate\Support\Facades\Validator; // Add this line to import the Hash class
 
 class SignUpController extends Controller
 {
@@ -28,7 +28,7 @@ class SignUpController extends Controller
         }
         // dd($request->all());
 
-        $user = new User();
+        $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);

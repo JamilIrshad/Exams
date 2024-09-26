@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use App\Models\Exam;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\OrderItem;
 
 class OrderController extends Controller
 {
@@ -21,28 +21,25 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store($exam)
     {
-        $exam=Exam::find($exam);
+        $exam = Exam::find($exam);
         // dd($exam);
-        $order = new Order();
+        $order = new Order;
         $order->user_id = Auth::id();
-        $order->total= $exam->price;
-        
+        $order->total = $exam->price;
+
         $order->save();
-        
-        $orderitem = new OrderItem();
+
+        $orderitem = new OrderItem;
         $orderitem->order_id = $order->id;
         $orderitem->exam_id = $exam->id;
-        
+
         // dd($orderitem);
         $orderitem->save();
         //redirect to payment view and pass order

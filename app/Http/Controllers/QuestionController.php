@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\QuestionStoreRequest;
-use App\Models\Question;
 use App\Models\Exam;
-use Illuminate\Http\Request;
+use App\Models\Question;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -20,6 +20,7 @@ class QuestionController extends Controller
         foreach ($questions as $question) {
             $question->correct_answer = explode(',', $question->correct_answer);
         }
+
         // dd($questions);
         return view('questions.list', ['questions' => $questions]);
     }
@@ -30,6 +31,7 @@ class QuestionController extends Controller
     public function create()
     {
         $exams = Exam::orderBy('id', 'asc')->get();
+
         return view('questions.create', ['exams' => $exams]);
     }
 
@@ -39,7 +41,7 @@ class QuestionController extends Controller
     public function store(QuestionStoreRequest $request)
     {
         // dd($request->all());
-        $question = new Question();
+        $question = new Question;
 
         $question->question = $request->question;
         $question->exam_id = $request->exam;
@@ -73,8 +75,6 @@ class QuestionController extends Controller
         return $pdf->download($filename);
     }
 
-
-
     /**
      * Display the specified resource.
      */
@@ -88,6 +88,7 @@ class QuestionController extends Controller
         foreach ($questions as $question) {
             $question->correct_answer = explode(',', $question->correct_answer);
         }
+
         return view('questions.list', ['questions' => $questions, 'exam' => $exam->name]);
     }
 
@@ -114,6 +115,4 @@ class QuestionController extends Controller
     {
         //
     }
-
-
 }

@@ -2,18 +2,17 @@
 
 namespace App\Exports;
 
-use App\Models\Exam;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ExamsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles, WithColumnWidths, WithColumnFormatting
+class ExamsExport implements FromCollection, ShouldAutoSize, WithColumnFormatting, WithColumnWidths, WithHeadings, WithStyles
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -31,7 +30,7 @@ class ExamsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithS
     {
         return [
             'B' => 36,
-            'C' => 74,          
+            'C' => 74,
         ];
     }
 
@@ -42,6 +41,7 @@ class ExamsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithS
             'F' => NumberFormat::FORMAT_CURRENCY_USD_INTEGER,
         ];
     }
+
     public function headings(): array
     {
         return [
@@ -58,7 +58,7 @@ class ExamsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithS
     {
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true, 'size' => 20]],
+            1 => ['font' => ['bold' => true, 'size' => 20]],
         ];
     }
 }

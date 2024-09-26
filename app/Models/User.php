@@ -10,8 +10,8 @@ use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
     use Billable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -54,8 +54,6 @@ class User extends Authenticatable
 
     public function payments()
     {
-        return $this->hasManyThrough(Payment::class, Order::class,'user_id','order_id','id','id');
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'order_id', 'id', 'id');
     }
-
-    
 }

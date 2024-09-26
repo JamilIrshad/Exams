@@ -30,8 +30,9 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             //After saving redirect to display of all categories
-            return redirect()->intended('exams')->with('success', 'Logged in Successfully');;
+            return redirect()->intended('exams')->with('success', 'Logged in Successfully');
         }
 
         return back()->withErrors([
@@ -44,6 +45,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('login')->with('success', 'Logged out Successfully');
     }
 }

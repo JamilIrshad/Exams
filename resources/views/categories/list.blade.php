@@ -10,12 +10,10 @@
 </head>
 
 <body>
-<x-navbar />
+    <x-navbar />
     <div class="container my-3">
         <div class="row d-flex justify-content-center">
-            @if (Session::has('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
-            @endif
+            <x-alerts />
             @if (Auth::user()->is_admin == 1)
                 <div class="row justify-content-center ms-1 mb-3">
                     <div class="col-md-8 d-flex justify-content-end mt-1">
@@ -67,6 +65,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 1500);
+        });
+    </script>
 </body>
 
 </html>

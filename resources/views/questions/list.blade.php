@@ -13,12 +13,7 @@
     <x-navbar />
     <div class="container my-1">
         <div class="row d-flex justify-content-center">
-            @if (Session::has('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
-            @endif
-            @if (Session::has('error'))
-                <div class="alert alert-danger">{{session('error')}}</div>
-            @endif
+            <x-alerts />
             <div class="col-md-12 d-flex justify-content-end my-3">
                 @if (Auth::user()->is_admin == 1)
                         <a href="{{route('questions.create')}}" class="btn btn-warning border-black border-2">Add
@@ -118,6 +113,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 1500);
+        });
+    </script>
 </body>
 
 </html>

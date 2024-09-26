@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->integer('total');
-            
+
             //foreign relation
 
             $table->foreign('user_id')->references('id')->on('users');

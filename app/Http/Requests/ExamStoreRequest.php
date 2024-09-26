@@ -34,7 +34,7 @@ class ExamStoreRequest extends FormRequest
             'category' => 'required|string',
             //uploaded file should be an image, and should be of type jpeg, png, jpg, gif, svg, and should be less than 10MB
             //if route is update, then image is not required but if uploaded then it should be image
-            'image' => $this->route()->named('exams.store') ? 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240' : 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240'
+            'image' => $this->route()->named('exams.store') ? 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240' : 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
 
         ];
     }
@@ -56,7 +56,7 @@ class ExamStoreRequest extends FormRequest
             'image.required' => 'Image is required.',
             'image.image' => 'Uploaded file should be an image.',
             'image.mimes' => 'Uploaded file should be of type: jpeg, png, jpg, gif, svg.',
-            'image.max' => 'Uploaded file should be less than 10MB.'
+            'image.max' => 'Uploaded file should be less than 10MB.',
         ];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\Exam;
 
+use App\Models\Exam;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class ExamFactory extends Factory
             'category_id' => $this->faker->numberBetween(1, 4), // Random category ID between 1 and 4
             'description' => $this->faker->sentence(10), // Generates a random description
             'price' => $this->faker->randomFloat(2, 10, 100), // Price between 10 and 100
-            'image_path' => 'exam' . $this->faker->numberBetween(1, 5) . '.jpg', // Random image path
+            'image_path' => 'exam'.$this->faker->numberBetween(1, 5).'.jpg', // Random image path
         ];
     }
 }

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Exam;
-use App\Models\Category;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\ExamStoreRequest;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Response;
 use App\Exports\ExamsExport;
+use App\Http\Requests\ExamStoreRequest;
+use App\Models\Category;
+use App\Models\Exam;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-
 
 class ExamController extends Controller
 {
@@ -44,7 +42,7 @@ class ExamController extends Controller
             ->select('e.id', 'e.image_path', 'e.name', 'e.description', 'c.name as category_name', 'e.exam_date', 'e.price');
 
         // search using search term from datatable
-        if (!empty($data['search']['value'])) {
+        if (! empty($data['search']['value'])) {
             $search = $data['search']['value'];
             $query->where(function ($q) use ($search) {
                 $q->where('e.name', 'like', "%{$search}%")
@@ -56,7 +54,7 @@ class ExamController extends Controller
         }
 
         // get records based on category name
-        if (!empty($data['category'])) {
+        if (! empty($data['category'])) {
             $query->where('c.name', $data['category']);
         }
 
@@ -64,7 +62,7 @@ class ExamController extends Controller
         $recordsTotal = $query->count();
 
         // sorting based on column name and column direction(asc,desc)
-        if (!empty($data['order'])) {
+        if (! empty($data['order'])) {
             $columnIndex = $data['order'][0]['column'];
             $columnName = $data['columns'][$columnIndex]['data'];
             $columnSortOrder = $data['order'][0]['dir'];
@@ -87,6 +85,7 @@ class ExamController extends Controller
             'recordsFiltered' => $recordsTotal,
             'data' => $exams,
         ];
+
         return response()->json($response, Response::HTTP_OK);
     }
 
@@ -108,16 +107,16 @@ class ExamController extends Controller
             $exams[] = $exam;
         }
 
-        if (!empty($exams)) {
+        if (! empty($exams)) {
             return response()->json([
-                'message' => "Data Found",
-                "code" => 200,
-                "data" => $exams
+                'message' => 'Data Found',
+                'code' => 200,
+                'data' => $exams,
             ]);
         } else {
             return response()->json([
-                'message' => "No Data Found",
-                "code" => 404
+                'message' => 'No Data Found',
+                'code' => 404,
             ]);
         }
     }
@@ -125,6 +124,7 @@ class ExamController extends Controller
     public function create()
     {
         $categories = Category::orderBy('id', 'asc')->get();
+
         return view('exams.create', ['categories' => $categories]);
     }
 
@@ -132,17 +132,16 @@ class ExamController extends Controller
     {
 
         //DB Insertion
-        $exam = new Exam();
+        $exam = new Exam;
         $exam->name = $request->name;
         $exam->description = $request->description;
         $exam->exam_date = $request->exam_date;
         $exam->price = $request->price;
         $exam->category_id = $request->category;
 
-
         //instead of public uploads folder, storage folder should be used.
 
-        if ($request->image != "") {
+        if ($request->image != '') {
             $image_path = $request->file('image')->store('exams');
 
             //Save uploads path to DB
@@ -165,6 +164,7 @@ class ExamController extends Controller
 
         //return the view with the found exam
         $categories = Category::orderBy('id', 'asc')->get();
+
         return view('exams.edit', ['exam' => $exam, 'categories' => $categories]);
     }
 
@@ -222,8 +222,6 @@ class ExamController extends Controller
         //redirect to list after successful deletion
         return redirect()->route('exams.list')->with('success', 'Exam deleted successfully');
     }
-
-
 
     public function export()
     {

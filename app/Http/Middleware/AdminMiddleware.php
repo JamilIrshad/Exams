@@ -16,9 +16,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user() && Auth::user()->is_admin == 1){
+        if (Auth::user() && Auth::user()->is_admin == 1) {
             return $next($request);
         }
+
         return redirect()->intended('exams')->with('error', 'You were not authorized to access the previous page. Logout and then login with an admin account to access it.');
     }
 }

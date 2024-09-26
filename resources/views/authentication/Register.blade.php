@@ -15,6 +15,7 @@
     <div class="container my-1 py-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-5 mt-4">
+                <x-alerts />
                 <h1> Signup Form</h1>
                 <form action="{{route('signup')}}" method="post">
                     @csrf

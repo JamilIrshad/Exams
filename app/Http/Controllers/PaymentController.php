@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\purchase;
-use App\Models\Payment;
-use Illuminate\Support\Facades\Mail;
-
-use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Payment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
 
 class PaymentController extends Controller
@@ -39,12 +38,13 @@ class PaymentController extends Controller
 
         return $request->user()->checkoutCharge($cents, $exam->name, 1, [
             'metadata' => ['order_id' => $order->id],
-            'success_url' => route('payment.store') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('payment.declined') . '?checkout=cancelled',
+            'success_url' => route('payment.store').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('payment.declined').'?checkout=cancelled',
         ]);
     }
 
-    public function declined(){
+    public function declined()
+    {
         return redirect()->route('exams')->with('error', 'Payment declined. Try again later.');
     }
 
@@ -53,33 +53,30 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-         
+
         $sessionId = $request->get('session_id');
-        if($sessionId === null){
+        if ($sessionId === null) {
             return redirect()->intended('exams')->with('error', 'Payment declined. Try again later.');
         }
 
         $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId, []);
         if ($session->payment_status !== 'paid') {
             return redirect()->intended('exams')->with('error', 'Payment declined. Try again later.');
-            
+
         }
         $orderId = $session['metadata']['order_id'] ?? null;
 
         //send email to user
         $order = Order::find($orderId);
         Mail::to($request->user()->email)->send(new purchase($orderId, $order->orderItems->first()->exam));
-       // dd($request);
+        // dd($request);
 
-        $payment = new Payment();
+        $payment = new Payment;
         $payment->order_id = $orderId;
         $payment->provider = 'Stripe';
         $payment->save();
 
-        
-
         // dd($email, $exam, $order);
-
 
         return redirect()->route('exams.list')->with('success', 'Payment successful');
 
