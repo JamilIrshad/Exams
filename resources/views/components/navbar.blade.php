@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <div class="container-fluid">
         <!-- Brand on the left -->
-        <a class="navbar-brand text-primary h1 ml-auto ms-5" href="{{route('exams.list')}}">Exams CRUD</a>
+        <a class="navbar-brand ms-5 mb-2" href="{{route('exams.list')}}">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 60px; width:75px;">
+        </a>
 
         <!-- Navbar toggle button for mobile view -->
         <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

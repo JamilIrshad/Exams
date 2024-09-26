@@ -50,8 +50,8 @@
                                     <th class="align-middle text-center">Description</th>
                                     <th class="align-middle">ExamDate</th>
                                     <th class="align-middle text-center">Category</th>
-                                    <th class="align-middle text-center">Price</th>
-                                    <th class="align-middle text-center">Actions</th>
+                                    <th class="align-middle">Price</th>
+                                    <th class="align-middle">Actions</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
