@@ -35,6 +35,12 @@
                         <h5>Exams List</h5>
                     </div>
                     <div class="card-body">
+                        @if(Auth::user()->is_admin == 1)
+                            <div class="container d-flex justify-content-end mb-5">
+                                <a href="{{ route('exams.export') }}" class="btn btn-outline-success my-1">Export Exams</a>
+
+                            </div>
+                        @endif
                         <table class="table" id="datatable">
                             <thead>
                                 <tr>

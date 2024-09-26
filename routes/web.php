@@ -78,6 +78,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //get route for displaying pdf.question
     Route::get('/questions/pdf/{exam}', [QuestionController::class, 'showpdf'])->name('questions.showPDF');
+
+    //Export exams
+    Route::get('/exams/export',[ExamController::class,'export'])->name('exams.export');
 });
 
 //Routes which require only auth middleware

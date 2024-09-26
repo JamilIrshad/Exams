@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ExamStoreRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
+use App\Exports\ExamsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ExamController extends Controller
@@ -217,14 +219,9 @@ class ExamController extends Controller
     }
 
 
-    public function search(Request $request)
+
+    public function export()
     {
-        // dd($request);
-        $searchterm = $request->search;
-        //search for exams where name and description is like the search query
-        $exams = Exam::where('name', 'like', '%' . $searchterm . '%')->orWhere('description', 'like', '%' . $searchterm . '%')->orWhereHas('category', function ($query) use ($searchterm) {
-            $query->where('categories.name', 'like', "%{$searchterm}%");
-        })->with('category')->get();
-        return view('exams.list', ['exams' => $exams]);
+        return Excel::download(new ExamsExport, 'all-exams.xlsx');
     }
 }
